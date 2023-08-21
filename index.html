@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - Ensino Médio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="quiz-container">
+        <h1>Quiz - Ensino Médio</h1>
+        <div id="question"></div>
+        <div id="options"> 
+            <button class="option" id="btn-0"></button>
+            <button class="option" id="btn-1"></button>
+            <button class="option" id="btn-2"></button>
+            <button class="option" id="btn-3"></button>
+        </div>
+    </div>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        let questions = [
+            {
+                question: "Qual é o maior satélite natural da Terra?",
+                options: ["<i class='fas fa-sun icon'></i>Sol", "<i class='fas fa-mars icon'></i>Marte", "<i class='fas fa-moon icon'></i>Lua", "<i class='fas fa-venus icon'></i>Vênus"],
+                answer: 2,
+                image: "https://via.placeholder.com/200"
+                
+            },
+            {
+                question: "Qual é o elemento químico de símbolo 'O'?",
+                options: ["<i class='fas fa-water icon'></i>Oxigênio", "<i class='fas fa-coins icon'></i>Ouro", "<i class='fas fa-cog icon'></i>Cobre", "<i class='fas fa-leaf icon'></i>Prata"],
+                answer: 0,
+                image: ""
+            },
+        ];
+
+        var currentQuestion = 0;
+        var chances = 3;
+        var score = 10;
+
+        function loadQuestion() {
+            if (currentQuestion < questions.length) {
+                const questionElem = document.getElementById("question");
+                const optionsElem = document.getElementById("options");
+                var resultElem = document.getElementById("result");
+
+                questionElem.innerHTML = questions[currentQuestion].question;
+
+                optionsElem.innerHTML = "";
+                for (let i = 0; i < 4; i++) {
+                    const optionBtn = document.createElement("button");
+                    optionBtn.className = "option";
+                    optionBtn.innerHTML = questions[currentQuestion].options[i];
+                    optionBtn.addEventListener("click", () => checkAnswer(i));
+                    optionsElem.appendChild(optionBtn);
+                }
+
+                const imageElem = document.createElement("img");
+                imageElem.src = questions[currentQuestion].image;
+                imageElem.alt = "Imagem auxiliar";
+                imageElem.style.width = "200px";
+                imageElem.style.marginTop = "20px";
+                questionElem.appendChild(imageElem);
+
+                resultElem.innerHTML = ("Tentativas restantes:" + remainingAttempts+" | Pontuação:" +score );
+            } else {
+                document.getElementById("quiz-container").innerHTML = "<h1>Fim do Quiz</h1>";
+                resultElem.innerHTML = ("Tentativas restantes:" + remainingAttempts+" | Pontuação:" +score );
+            }
+        }
+ 
+        function checkAnswer(selectedAnswer) {
+            if (selectedAnswer === questions[currentQuestion].answer) {
+                score += 10;
+                currentQuestion++;
+               remainingAttempts =2; 
+               resultElem.innerHTML = ("Tentativas restantes:" + remainingAttempts+" | Pontuação:" +score );
+                loadQuestion();
+            } else {
+                remainingAttempts--;
+                if (remainingAttempts === 0) {
+                    document.getElementById("quiz-container").innerHTML = "<h1>Fim do Quiz</h1>";
+                    remainingAttempts=0;
+                } else {
+                    alert("Resposta incorreta! Tente novamente.");
+                    remainingAttempts--;
+                    resultElem.innerHTML = ("Tentativas restantes:" + remainingAttempts+" | Pontuação:" +score );
+                }
+            }
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
